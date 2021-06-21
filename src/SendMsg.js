@@ -1,7 +1,6 @@
 const http = require('http')
 const fs = require('fs')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
-const Authorization = 'Basic ' + Buffer.from(config.USER + ':' + config.PASS).toString('base64')
 
 let Api = {
     // 发送文本消息
@@ -128,8 +127,7 @@ function doAction(bodyData, funcname) {
         path: config.URI + 'qq=' + config.QQ + '&funcname=' + funcname + '&timeout=30',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': Authorization
+            'Content-Type': 'application/json'
         }
     }
     // 发送消息

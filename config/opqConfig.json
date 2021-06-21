@@ -1,11 +1,8 @@
 {
-	"QQ": 233333333,
+	"QQ": 1468557975,
 	"HOST": "127.0.0.1",
-	"PORT": 80,
+	"PORT": 9720,
 	"URI": "/v1/LuaApiCaller?",
-	"USER": "admin",
-	"PASS": "admin",
-	"APIKEY": "",
 	"PATTERN": "来(.*?)[点丶份张幅](.*?)的?(|r18)[色瑟涩插][画图圖]",
 	"MONGODBURL": "mongodb://long:123qwe@localhost:50003/Article"
 }

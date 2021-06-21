@@ -3,16 +3,10 @@ const fs = require('fs')
 let Users = []
 // 读取配置文件
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
-const WS_API = "http://" + config.HOST
+const WS_API = "http://" + config.HOST + ":" + config.PORT
 const QQ = config.QQ
-const user = config.USER
-const pass = config.PASS
-const Authorization = 'Basic ' + Buffer.from(`${user}:${pass}`).toString('base64')
 const socket = io(WS_API, {
-    transports: ['websocket'],
-    extraHeaders: {
-        Authorization
-    }
+    transports: ['websocket']
 })
 
 socket.on('connect', e => {
