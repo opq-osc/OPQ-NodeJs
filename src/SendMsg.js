@@ -52,12 +52,12 @@ let Api = {
         }
         doAction(JSON.stringify(bodyData), 'SendMsg')
     },
-    SendPicMsgWithAtAndBaseBuf(groupId, userId, base64Buf) {
+    SendPicMsgWithAtAndBaseBuf(groupId, message, base64Buf) {
         const bodyData = {
             "toUser": groupId,
             "sendToType": 2,
             "sendMsgType": "PicMsg",
-            "content": "[ATUSER(" + userId + ")]请10分钟内验证！,看不清请回复：看不清",
+            "content": message,
             "groupid": 0,
             "picBase64Buf": base64Buf
         }

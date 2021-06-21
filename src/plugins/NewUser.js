@@ -18,7 +18,8 @@ let NewUser = {
 			}, 1000)
 			setTimeout(() => {
 				const base64 = canvas.toDataURL().replace("data:image/png;base64,", "")
-				Api.SendPicMsgWithAtAndBaseBuf(groupId, userId, base64)
+				const message = "[ATUSER(" + userId + ")]请10分钟内验证！,看不清请回复：看不清"
+				Api.SendPicMsgWithAtAndBaseBuf(groupId, message, base64)
 			}, 2000)
 		} catch (e) {
 			console.error(e.message);
