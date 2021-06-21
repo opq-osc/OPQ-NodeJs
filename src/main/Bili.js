@@ -1,7 +1,6 @@
 const socket = require('../Socket').getSocket()
 const schedule = require('node-schedule')
 const BiliUp = require('../plugins/BiliUp')
-const schedule = require('node-schedule')
 
 socket.on('OnGroupMsgs', async data => {
     const { FromGroupId, Content, MsgType } = data.CurrentPacket.Data
