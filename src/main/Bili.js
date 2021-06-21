@@ -9,7 +9,7 @@ socket.on('OnGroupMsgs', async data => {
             case '本群订阅':
                 await BiliUp.listUps(FromGroupId)
                 break
-            case 'cs':
+            case '手动拉取':
                 await BiliUp.pushNews()
                 break
         }
