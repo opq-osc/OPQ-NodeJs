@@ -60,7 +60,7 @@ let Api = {
             "groupid": 0,
             "picBase64Buf": base64Buf
         }
-        doAction(JSON.stringify(bodyData), 'SendMsgV2')
+        doAction(JSON.stringify(bodyData), 'SendMsg')
     },
     SendPicMsgV2(groupId, picUrl, content) {
         const bodyData = {

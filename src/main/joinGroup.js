@@ -2,6 +2,7 @@ const random = require('string-random')
 const socket = require('../Socket').getSocket()
 const Api = require('../SendMsg')
 const NewUser = require('../plugins/NewUser')
+const Welcome = require('../plugins/Welcome')
 let NewUsers = new Map()
 
 socket.on('OnEvents', async data => {
@@ -29,7 +30,7 @@ socket.on('OnGroupMsgs', async data => {
     let { FromGroupId, FromUserId, Content, MsgType } = data.CurrentPacket.Data
     if (MsgType == 'TextMsg') {
         if (NewUsers.get(FromUserId) == Content) {
-            await Plugin.Welcome(FromGroupId, FromUserId)
+            await Welcome.doAction(FromGroupId, FromUserId)
             NewUsers.delete(FromUserId)
         }
         if (NewUsers.has(FromUserId) != null && Content == '看不清') {
