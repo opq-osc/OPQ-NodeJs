@@ -7,10 +7,10 @@ let NewUsers = new Map()
 
 socket.on('OnEvents', async data => {
     console.log('>>OnEvents', JSON.stringify(data, null, 2))
-    let { EventData, EventName, EventMsg } = data.CurrentPacket.Data
-    if (EventName == 'ON_EVENT_GROUP_JOIN') {
-        let userId = EventData.UserID
-        let groupId = EventMsg.FromUin
+    const { EventData, EventName, EventMsg } = data.CurrentPacket.Data
+    const userId = EventData.UserID
+    const groupId = EventMsg.FromUin
+    if (EventName == 'ON_EVENT_GROUP_JOIN' && groupId != '757360354') {
         const code = random(6, { letters: false })
         NewUsers.set(userId, code)
         console.log(NewUsers)
