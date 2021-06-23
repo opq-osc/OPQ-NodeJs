@@ -2,7 +2,7 @@
 ## 开始
 
 1.首先的有node环境，没有的先[安装](https://xjlz.github.io/2020/08/10/Centos7%E5%AE%89%E8%A3%85Node+Npm/)。  
-2.有环境了，先 npm install 把依赖下载下来。
+2.有环境了，先 npm install 把依赖下载下来。  
 3.由于订阅功能使用到mongodb数据库，需要先[安装](https://xjlz.github.io/2020/08/10/MongoDB/)  
 4.最后记得在config.json文件中填写相关配置  
 
