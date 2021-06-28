@@ -1,5 +1,6 @@
 const BiliUp = require('./Up')
 const Video = require('./Video')
+const Job = require('./Job')
 
 let CRUD = {
     async listByGroupId(groupId) {
@@ -109,6 +110,29 @@ let CRUD = {
     },
     insert(data) {
         Video.create(data, (err, res) => {
+            if (err) {
+                console.log(err)
+            } else if (res) {
+                console.log('success')
+            }
+
+        })
+    },
+
+
+    async findJob(md5,groupId) {
+        return Job.findOne({ md5: md5, groupId: groupId }, (err, res) => {
+            if (err) {
+                console.log(err)
+                return err
+            }
+            if (res) {
+                return res
+            }
+        })
+    },
+    saveJob(data) {
+        Job.create(data, (err, res) => {
             if (err) {
                 console.log(err)
             } else if (res) {
