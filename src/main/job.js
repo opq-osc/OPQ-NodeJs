@@ -1,10 +1,13 @@
 const schedule = require('node-schedule')
 const Job = require('../plugins/Job')
-const group = [578111062,230349459]
+const group = [578111062,454417041]
 
-schedule.scheduleJob('*/5 * * * *', () => {
+schedule.scheduleJob('*/30 * * * *', () => {
     // 原神资讯
+    // Job.yuanshen(578111062)
+    // Job.m_8kcosplay(454417041)
     group.forEach(e => {
         Job.yuanshen(e)
+        // Job.m_8kcosplay(e)
     });
 })
