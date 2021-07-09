@@ -98,6 +98,29 @@ let Jobs = {
                 await CRUD.saveJob(data)
             }
         })
+    },
+    zuxingjianPhoto(groupId){
+        axios.get('https://api.bilibili.com/x/dynamic/feed/draw/doc_list?page_num=0&page_size=30&biz=all&jsonp=jsonp&uid=14453048')
+        .then(async res => {
+            const {dyn_id, description, pictures} = res.data.data.items[0]
+            // 查库
+            const md5 = MD5(Number(dyn_id))
+            const result = await CRUD.findJob(md5, groupId)
+            if (result == null) {
+                let data = {
+                    'md5': md5,
+                    'content': description,
+                    'imageUrl': '',
+                    'linkUrl': '',
+                    'groupId': groupId
+                }
+                await Api.SendTextMsgV2(groupId, description)
+                pictures.forEach(async r => {
+                    await Api.SendPicMsgV2(groupId, r.img_src, "")
+                });
+                await CRUD.saveJob(data)
+            }
+        })
     }
 }
 
