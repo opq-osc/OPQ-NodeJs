@@ -87,13 +87,12 @@ let Jobs = {
                     'md5': md5,
                     'content': jsonData.item.description,
                     'imageUrl': '',
-                    'linkUrl': dynamicId + '',
+                    'linkUrl': '',
                     'groupId': groupId
                 }
                 const pictures = jsonData.item.pictures
                 await Api.SendTextMsgV2(groupId, jsonData.item.description)
                 pictures.forEach(async r => {
-                    data.imageUrl = r.img_src
                     await Api.SendPicMsgV2(groupId, r.img_src, "")
                 });
                 await CRUD.saveJob(data)
