@@ -122,8 +122,8 @@ async function getMap(mids) {
         videoInfo = videoInfo[0]
         if (videoInfo != null) {
             const res = await CRUD.findByBvid(videoInfo.bvid)
-            console.log('res')
-            console.log(res)
+            // console.log('res')
+            // console.log(res)
             if (res == null) {
                 // 发送消息并保存
                 const info = {

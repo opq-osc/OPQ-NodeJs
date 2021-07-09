@@ -70,7 +70,66 @@ let Jobs = {
             })
 
         })
+    },
+    zuxingjian(groupId) {
+        // https://api.bilibili.com/x/space/article?mid=14453048&pn=1&ps=12&sort=publish_time&jsonp=jsonp
+        axios.get('https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=14453048&offset_dynamic_id=0&need_top=1&platform=web')
+        .then(async res => {
+            const data = res.data.data
+            const card = data.cards[0].card
+            const dynamicId = data.cards[0].desc.dynamic_id
+            const jsonData = JSON.parse(card)
+            // 查库
+            const md5 = MD5(dynamicId)
+            const result = await CRUD.findJob(md5, groupId)
+            if (result == null) {
+                let data = {
+                    'md5': md5,
+                    'content': jsonData.item.description,
+                    'imageUrl': '',
+                    'linkUrl': dynamicId + '',
+                    'groupId': groupId
+                }
+                const pictures = jsonData.item.pictures
+                await Api.SendTextMsgV2(groupId, jsonData.item.description)
+                pictures.forEach(async r => {
+                    data.imageUrl = r.img_src
+                    await Api.SendPicMsgV2(groupId, r.img_src, "")
+                });
+                await CRUD.saveJob(data)
+            }
+        })
     }
 }
 
 module.exports = Jobs
+
+/**
+ * {
+    "item": {
+        "at_control": "",
+        "category": "daily",
+        "description": "竹行简&质量  动漫美图推荐【552】 \\n点击「转发」立刻永久保存美图[tv_点赞]\\n\\n动态内图片均为互联网整理收集，不会作为商业用途使用。侵权即删致歉（喜欢的作品ID可以通过https:\\/\\/saucenao.com查找作者）\\n#动漫美图##动漫壁纸##壁纸##二次元##动漫##萌妹子##二次元美图##美图##插画##P站搬运##FGO##明日方舟##原神#",
+        "id": 144211469,
+        "is_fav": 0,
+        "pictures": [
+            {
+                "img_height": 3600,
+                "img_size": 7635.96,
+                "img_src": "https:\\/\\/i0.hdslb.com\\/bfs\\/album\\/ae1be86697b3bd010ac931d9ed9a29f94c9a5959.png",
+                "img_tags": null,
+                "img_width": 2525
+            }
+        ],
+        "pictures_count": 9,
+        "reply": 0,
+        "role": [],
+        "settings": {
+            "copy_forbidden": "0"
+        },
+        "source": [],
+        "title": "",
+        "upload_time": 1625714219
+    }
+}
+ */
