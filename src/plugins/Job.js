@@ -72,55 +72,84 @@ let Jobs = {
         })
     },
     zuxingjian(groupId) {
-        // https://api.bilibili.com/x/space/article?mid=14453048&pn=1&ps=12&sort=publish_time&jsonp=jsonp
         axios.get('https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=14453048&offset_dynamic_id=0&need_top=1&platform=web')
-        .then(async res => {
-            const data = res.data.data
-            const card = data.cards[0].card
-            const dynamicId = data.cards[0].desc.dynamic_id
-            const jsonData = JSON.parse(card)
-            // 查库
-            const md5 = MD5(dynamicId)
-            const result = await CRUD.findJob(md5, groupId)
-            if (result == null) {
-                let data = {
-                    'md5': md5,
-                    'content': jsonData.item.description,
-                    'imageUrl': '',
-                    'linkUrl': '',
-                    'groupId': groupId
+            .then(async res => {
+                const data = res.data.data
+                const card = data.cards[0].card
+                const dynamicId = data.cards[0].desc.dynamic_id
+                const jsonData = JSON.parse(card)
+                // 查库
+                const md5 = MD5(dynamicId)
+                const result = await CRUD.findJob(md5, groupId)
+                if (result == null) {
+                    let data = {
+                        'md5': md5,
+                        'content': jsonData.item.description,
+                        'imageUrl': '',
+                        'linkUrl': '',
+                        'groupId': groupId
+                    }
+                    const pictures = jsonData.item.pictures
+                    await Api.SendTextMsgV2(groupId, jsonData.item.description)
+                    pictures.forEach(async r => {
+                        await Api.SendPicMsgV2(groupId, r.img_src, "")
+                    });
+                    await CRUD.saveJob(data)
                 }
-                const pictures = jsonData.item.pictures
-                await Api.SendTextMsgV2(groupId, jsonData.item.description)
-                pictures.forEach(async r => {
-                    await Api.SendPicMsgV2(groupId, r.img_src, "")
-                });
-                await CRUD.saveJob(data)
-            }
-        })
+            })
     },
-    zuxingjianPhoto(groupId){
+    zuxingjianPhoto(groupId) {
         axios.get('https://api.bilibili.com/x/dynamic/feed/draw/doc_list?page_num=0&page_size=30&biz=all&jsonp=jsonp&uid=14453048')
-        .then(async res => {
-            const {dyn_id, description, pictures} = res.data.data.items[0]
-            // 查库
-            const md5 = MD5(Number(dyn_id))
-            const result = await CRUD.findJob(md5, groupId)
-            if (result == null) {
-                let data = {
-                    'md5': md5,
-                    'content': description,
-                    'imageUrl': '',
-                    'linkUrl': '',
-                    'groupId': groupId
+            .then(async res => {
+                const { dyn_id, description, pictures } = res.data.data.items[0]
+                // 查库
+                const md5 = MD5(Number(dyn_id))
+                const result = await CRUD.findJob(md5, groupId)
+                if (result == null) {
+                    let data = {
+                        'md5': md5,
+                        'content': description,
+                        'imageUrl': '',
+                        'linkUrl': '',
+                        'groupId': groupId
+                    }
+                    await Api.SendTextMsgV2(groupId, description)
+                    pictures.forEach(async r => {
+                        await Api.SendPicMsgV2(groupId, r.img_src, "")
+                    });
+                    await CRUD.saveJob(data)
                 }
-                await Api.SendTextMsgV2(groupId, description)
-                pictures.forEach(async r => {
-                    await Api.SendPicMsgV2(groupId, r.img_src, "")
-                });
-                await CRUD.saveJob(data)
-            }
-        })
+            })
+    },
+    zuxingjianArtical(groupId) {
+        axios.get('https://api.bilibili.com/x/space/article?mid=14453048&pn=1&ps=12&sort=publish_time&jsonp=jsonp')
+            .then(async res => {
+                const id = res.data.data.articles[0].id
+                const md5 = MD5(Number(id))
+                const result = await CRUD.findJob(md5, groupId)
+                if (result == null) {
+                    let data = {
+                        'md5': md5,
+                        'content': '',
+                        'imageUrl': '',
+                        'linkUrl': '',
+                        'groupId': groupId
+                    }
+                    const url = 'https://www.bilibili.com/read/cv' + id
+                    axios.get(url).then(async res => {
+                        const $ = cheerio.load(res.data)
+                        data.content = $('head > title:nth-child(2)').text()
+                        data.linkUrl = url
+                        const list = $('#read-article-holder > figure')
+                        await Api.SendTextMsgV2(groupId, data.content)
+                        list.map(async (k) => {
+                            const obj = cheerio.load(list[k])('img')[0].attribs
+                            await Api.SendPicMsgV2(groupId, 'https:' + obj['data-src'], '')
+                        })
+                        await CRUD.saveJob(data)
+                    })
+                }
+            })
     }
 }
 
