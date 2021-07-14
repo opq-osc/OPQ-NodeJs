@@ -51,18 +51,30 @@ function findPic(groupId, reg) {
             }
         })
     } else {
-        Api.SendTextMsgV2(groupId, "未收录该系列插画！")
+        Api.SendTextMsgV2(groupId, "未收录该系列插画！将随机发送三张插画")
+        Pixiv.find({}).countDocuments().exec((err, res) => {
+            console.log('总数据：',res);
+            for (let index = 0; index < 3; index++) {
+                const index = Math.floor((Math.random() * res))
+                console.log(index);
+                Pixiv.find({}).skip(index - 1).limit(1).exec((err, res) => {
+                    sendPic(groupId, res[0].url)
+                })
+            }
+        })
     }
 }
 
 function pic(groupId, res) {
-    let index = Math.floor((Math.random() * res.length))
+    const index = Math.floor((Math.random() * res.length))
     console.log('index:' + index);
     let url = res[index].url
-    url = url.replace("i.pximg.net", "i.pixiv.cat")
     console.log(url)
-    // Api.SendPicMsg(groupId, url, "")
-    // Api.SendPicMsgV2(groupId, url, "")
+    sendPic(groupId, url)
+}
+
+function sendPic(groupId, url) {
+    url = url.replace("i.pximg.net", "i.pixiv.cat")
     https.get(url, function (res) {
         var chunks = []; //用于保存网络请求不断加载传输的缓冲数据
         var size = 0;　　 //保存缓冲数据的总长度
@@ -81,7 +93,6 @@ function pic(groupId, res) {
             Api.SendPicMsgWithBase64(groupId, base64Img)
         });
     });
-
 }
 
 module.exports = HPicture
