@@ -9,13 +9,9 @@ let HPicture = {
             console.log('num: ' + num)
             if (num && num <= 3) {
                 if (arr[2]) {
-                    for (let i = 0; i < num; i++) {
-                        //setTimeout(function () {
-                        findPic(groupId, arr[2])
-                        //}, 5000);
-                    }
+                    findPic(groupId, arr[2], num)
                 } else {
-                    findPic(groupId, false)
+                    findPic(groupId, false, num)
                 }
             }
 
@@ -23,7 +19,7 @@ let HPicture = {
     }
 }
 
-function findPic(groupId, reg) {
+function findPic(groupId, reg, num) {
     console.log("reg: " + reg);
     if (reg) {
         reg = new RegExp(reg) //模糊查询参数
@@ -39,38 +35,45 @@ function findPic(groupId, reg) {
                         console.log(err)
                         return
                     } else if (res.length === 0) {
-                        Api.SendTextMsgV2(groupId, "未收录该系列插画！")
+                        nothing(groupId)
                         return
                     } else {
-                        pic(groupId, res)
+                        pic(groupId, res, num)
                         return
                     }
                 })
             } else {
-                pic(groupId, res)
+                pic(groupId, res, num)
             }
         })
     } else {
-        Api.SendTextMsgV2(groupId, "未收录该系列插画！将随机发送三张插画")
-        Pixiv.find({}).countDocuments().exec((err, res) => {
-            console.log('总数据：',res);
-            for (let index = 0; index < 3; index++) {
-                const index = Math.floor((Math.random() * res))
-                console.log(index);
-                Pixiv.find({}).skip(index - 1).limit(1).exec((err, res) => {
-                    sendPic(groupId, res[0].url)
-                })
-            }
-        })
+        nothing(groupId)
     }
 }
 
-function pic(groupId, res) {
-    const index = Math.floor((Math.random() * res.length))
-    console.log('index:' + index);
-    let url = res[index].url
-    console.log(url)
-    sendPic(groupId, url)
+function nothing(groupId) {
+    Api.SendTextMsgV2(groupId, "未收录该系列插画！将随机发送三张插画")
+    Pixiv.find({}).countDocuments().exec((err, res) => {
+        console.log('总数据：', res);
+        for (let index = 0; index < 3; index++) {
+            const index = Math.floor((Math.random() * res))
+            console.log(index);
+            Pixiv.find({}).skip(index - 1).limit(1).exec((err, res) => {
+                sendPic(groupId, res[0].url)
+            })
+        }
+    })
+}
+
+function pic(groupId, res, num) {
+    console.log('num----->', num);
+    for (let i = 0; i < num; i++) {
+        const index = Math.floor((Math.random() * res.length))
+        console.log('index:' + index);
+        let url = res[index].url
+        console.log(url)
+        sendPic(groupId, url)
+    }
 }
 
 function sendPic(groupId, url) {
