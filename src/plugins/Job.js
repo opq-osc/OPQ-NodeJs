@@ -53,21 +53,35 @@ let Jobs = {
             //  https://images.free4.xyz/images/2021/07/05/tpj6y.jpg
             const index = Math.floor(Math.random() * 29)
             const url = result[index]
-            axios.get(url).then(async res => {
-                const a = res.data.toString()
-                const id = a.substring(a.indexOf('<article') + 13, a.indexOf('<article') + 23)
-                const $ = cheerio.load(res.data)
-                // #post-10090 > div > div.entry-content > p >a
-                const list = $('#' + id + ' > div > div.entry-content > p >a > img')
+            // 查库
+            const md5 = MD5(url)
+            const dbDate = await CRUD.findJob(md5, groupId)
+            if (dbDate == null) {
+                let data = {
+                    'md5': md5,
+                    'content': '',
+                    'imageUrl': '',
+                    'linkUrl': url,
+                    'groupId': groupId
+                }
+                axios.get(url).then(async res => {
+                    const a = res.data.toString()
+                    const id = a.substring(a.indexOf('<article') + 13, a.indexOf('<article') + 23)
+                    const $ = cheerio.load(res.data)
+                    // #post-10090 > div > div.entry-content > p >a
+                    const list = $('#' + id + ' > div > div.entry-content > p >a > img')
 
-                list.map(async (k) => {
-                    const alt = list[k].attribs.alt.split('.')
-                    const img = 'https://images.free4.xyz/images/' + url.substring(26, 36) + '/' + alt[0] + '.' + alt[2]
-                    console.log(img);
-                    await Api.SendPicMsgV2(groupId, img, '')
+                    list.map(async (k) => {
+                        const alt = list[k].attribs.alt.split('.')
+                        const img = 'https://images.free4.xyz/images/' + url.substring(26, 36) + '/' + alt[0] + '.' + alt[2]
+                        console.log(img);
+                        await Api.SendPicMsgV2(groupId, img, '')
 
+                    })
                 })
-            })
+                await CRUD.saveJob(data)
+            }
+
 
         })
     },
