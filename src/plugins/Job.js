@@ -168,7 +168,8 @@ let Jobs = {
     m_95mm(groupId) {
         const page = Math.floor(Math.random() * 30)
         console.log(page)
-        axios.get('https://www.95mm.net/search/?keywords=cos&append=list-home&' + page + '=2&pos=search&page=' + page)
+        // https://www.95mm.net/search/?keywords=cos&append=list-home&paged=2&pos=search&page=2
+        axios.get('https://www.95mm.net/search/?keywords=cos&append=list-home&paged=' + page + '&pos=search&page=' + page)
             .then(async res => {
                 const html = res.data
                 const $ = cheerio.load(html)
