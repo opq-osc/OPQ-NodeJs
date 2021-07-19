@@ -57,7 +57,7 @@ let Jobs = {
             const md5 = MD5(url)
             const dbDate = await CRUD.findJob(md5, groupId)
             if (dbDate == null) {
-                let data = {
+                const data = {
                     'md5': md5,
                     'content': '',
                     'imageUrl': '',
@@ -162,6 +162,66 @@ let Jobs = {
                         })
                         await CRUD.saveJob(data)
                     })
+                }
+            })
+    },
+    m_95mm(groupId) {
+        axios.get('https://www.95mm.net/category-2/list-1/index.html?page=1')
+            .then(async res => {
+                const html = res.data
+                const $ = cheerio.load(html)
+                const list = $('#dg_list > div')
+                // const { href } = [cheerio.load(list0])('div > div.media > a')[0].attribs
+                // console.log(href);
+                const result = await Promise.all(
+                    list.map((k) => {
+                        if (k != list.length - 1) {
+                            const url = {}
+                            url.href = cheerio.load(list[k])('div > div.media > a')[0].attribs.href
+                            numPs = cheerio.load(list[k])('div > div.media > div > span').text()
+                            url.num = Number(numPs.substring(0, numPs.lastIndexOf('P')))
+                            return url
+                        }
+                    }).toArray()
+                )
+                // console.log(result);
+                const index = Math.round(Math.random() * result.length)
+                const obj = result[index]
+                // console.log(obj.num);
+                // console.log(obj.href);
+                // 查库
+                const md5 = MD5(obj.href)
+                const dbDate = await CRUD.findJob(md5, groupId)
+                if (dbDate == null) {
+                    const data = {
+                        'md5': md5,
+                        'content': '',
+                        'imageUrl': '',
+                        'linkUrl': obj.href,
+                        'groupId': groupId
+                    }
+                    let urls = []
+                    for (let i = 1; i <= obj.num; i++) {
+                        let url = ''
+                        if (i === 1) {
+                            url = obj.href
+                        } else {
+                            url = obj.href.replace('.html', '/' + i + '.html')
+                        }
+                        // console.log(url);
+                        urls.push(url)
+                    }
+                    console.log(urls.length);
+                    urls.forEach(url => {
+                        axios.get(url).then(async res => {
+                            const html = res.data
+                            const $ = cheerio.load(html)
+                            const { src } = $('body > main > div > div.row.no-gutters > div > div.post-content > div.post > div > p > a > img')[0].attribs
+                            // console.log(src);
+                            await Api.SendPicMsgV2(groupId, src, '')
+                        })
+                    })
+                    await CRUD.saveJob(data)
                 }
             })
     }

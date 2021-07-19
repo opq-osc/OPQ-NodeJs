@@ -4,6 +4,7 @@ const History = require('../plugins/History')
 const Baike = require('../plugins/Baike')
 const Constellation = require('../plugins/Constellation')
 const HPicture = require('../plugins/HPicture')
+const Typhoon = require('../plugins/Typhoon')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
 const pattern = config.PATTERN
 socket.on('OnGroupMsgs', async data => {
@@ -13,6 +14,9 @@ socket.on('OnGroupMsgs', async data => {
         switch (Content) {
             case '历史上的今天':
                 await History.doAction(FromGroupId)
+                break
+            case '台风':
+                await Typhoon.doAction(FromGroupId)
                 break
         }
         if (Content.indexOf("百科") == 0) {
