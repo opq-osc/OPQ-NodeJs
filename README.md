@@ -25,6 +25,10 @@
 npm install pm2 -g
 ```
 
+**创建软连接**
+
+![image-20210720203252672](https://i.loli.net/2021/07/20/QNfpk4i92GeVdlI.png)
+
 
 
 ## 启动
