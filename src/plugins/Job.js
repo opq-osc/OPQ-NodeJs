@@ -104,11 +104,14 @@ let Jobs = {
                         'groupId': groupId
                     }
                     const pictures = jsonData.item.pictures
-                    await Api.SendTextMsgV2(groupId, jsonData.item.description)
-                    pictures.forEach(async r => {
-                        await Api.SendPicMsgV2(groupId, r.img_src, "")
-                    });
-                    await CRUD.saveJob(data)
+                    if (pictures) {
+                        console.log(pictures.length);
+                        await Api.SendTextMsgV2(groupId, jsonData.item.description)
+                        pictures.forEach(async r => {
+                            await Api.SendPicMsgV2(groupId, r.img_src, "")
+                        });
+                        await CRUD.saveJob(data)
+                    }
                 }
             })
     },
