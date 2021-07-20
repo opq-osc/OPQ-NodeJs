@@ -1,6 +1,7 @@
 const Api = require('../SendMsg')
 const Pixiv = require('./mongodb/Pixiv');
 const https = require('https');
+const axios = require('axios')
 let HPicture = {
     doAction(groupId, arr) {
         console.log('arr:' + arr)
@@ -66,36 +67,69 @@ function nothing(groupId) {
 }
 
 function pic(groupId, res, num) {
-    console.log('num----->', num);
-    for (let i = 0; i < num; i++) {
-        const index = Math.floor((Math.random() * res.length))
-        console.log('index:' + index);
-        let url = res[index].url
+    console.log('num----->', res.length);
+    const indexs = getIndex(res, num)
+    console.log(indexs);
+    for (let index = 0; index < indexs.length; index++) {
+        const element = indexs[index];
+        let url = res[element].url
         console.log(url)
         sendPic(groupId, url)
     }
+    // for (let i = 0; i < num; i++) {
+    //     const index = Math.floor((Math.random() * res.length))
+    //     console.log('index:' + index);
+    //     let url = res[index].url
+    //     console.log(url)
+    //     sendPic(groupId, url)
+    // }
 }
 
-function sendPic(groupId, url) {
+function getIndex(res, num) {
+    let arr = [];
+    for (var i = 0; i < num; i++) {
+        const arrNum = Math.floor((Math.random() * res.length))
+        let flag = true;
+        for (let j = 0; j <= arr.length; j++) {
+            if (arrNum == arr[j]) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            arr.push(arrNum);
+        } else {
+            i--;
+        }
+    }
+    return arr
+}
+
+async function sendPic(groupId, url) {
     url = url.replace("i.pximg.net", "i.pixiv.cat")
-    https.get(url, function (res) {
-        var chunks = []; //用于保存网络请求不断加载传输的缓冲数据
-        var size = 0;　　 //保存缓冲数据的总长度
-        res.on('data', function (chunk) {
-            chunks.push(chunk);
-            //累加缓冲数据的长度
-            size += chunk.length;
-        });
-        res.on('end', function (err) {
-            //Buffer.concat将chunks数组中的缓冲数据拼接起来，返回一个新的Buffer对象赋值给data
-            var data = Buffer.concat(chunks, size);
-            //可通过Buffer.isBuffer()方法判断变量是否为一个Buffer对象
-            console.log(Buffer.isBuffer(data));
-            //将Buffer对象转换为字符串并以base64编码格式显示
-            const base64Img = data.toString('base64');
-            Api.SendPicMsgWithBase64(groupId, base64Img)
-        });
-    });
+    const base64Img = await axios.get(url, { responseType: 'arraybuffer' })
+        .then(res => {
+            return new Buffer.from(res.data, 'binary').toString('base64')
+        })
+    Api.SendPicMsgWithBase64(groupId, base64Img)
+    // https.get(url, function (res) {
+    //     var chunks = []; //用于保存网络请求不断加载传输的缓冲数据
+    //     var size = 0;　　 //保存缓冲数据的总长度
+    //     res.on('data', function (chunk) {
+    //         chunks.push(chunk);
+    //         //累加缓冲数据的长度
+    //         size += chunk.length;
+    //     });
+    //     res.on('end', function (err) {
+    //         //Buffer.concat将chunks数组中的缓冲数据拼接起来，返回一个新的Buffer对象赋值给data
+    //         var data = Buffer.concat(chunks, size);
+    //         //可通过Buffer.isBuffer()方法判断变量是否为一个Buffer对象
+    //         console.log(Buffer.isBuffer(data));
+    //         //将Buffer对象转换为字符串并以base64编码格式显示
+    //         const base64Img = data.toString('base64');
+    //         Api.SendPicMsgWithBase64(groupId, base64Img)
+    //     });
+    // });
 }
 
 module.exports = HPicture
