@@ -89,10 +89,8 @@ centos7 使用puppeteer需要的依赖：
 #依赖库
 yum install pango.x86_64 libXcomposite.x86_64 libXcursor.x86_64 libXdamage.x86_64 libXext.x86_64 libXi.x86_64 libXtst.x86_64 cups-libs.x86_64 libXScrnSaver.x86_64 libXrandr.x86_64 GConf2.x86_64 alsa-lib.x86_64 atk.x86_64 gtk3.x86_64 -y
 
-#字体
+# 部分字体
 yum install ipa-gothic-fonts xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-utils xorg-x11-fonts-cyrillic xorg-x11-fonts-Type1 xorg-x11-fonts-misc -y
-
-Centos7 安装中文字体： https://blog.csdn.net/liuwenbiao1203/article/details/100096031
 ```
 
 更多插件等你来发掘。。。。
@@ -100,6 +98,42 @@ Centos7 安装中文字体： https://blog.csdn.net/liuwenbiao1203/article/detai
 ## 开发
 
 在Plugins文件中，按照例子进行开发即可。。。。
+
+## 遇到的问题
+
+- 安装puppeteer，无法创建文件夹，使用 **npm install --unsafe-perm=true --allow-root**
+
+![image-20210721093306068.png](https://i.loli.net/2021/07/21/1SU4FDh9LnIP6vK.png)
+
+- 使用puppeteer截图，发现有些字无法显示，centos7系统内置可能没有中文字体
+
+  ```
+  1、查看所有字体：（如果提示 fc-list: command not found，则需要安装# yum -y install fontconfig）
+  	fc-list
+  2、查看中文字体：
+  	fc-list :lang=zh
+  3、找到win10的字体，并使用工具上传到服务器上：
+      C:\Windows\Fonts\msyh.ttc  (微软雅黑)
+      C:\Windows\Fonts\simfang.ttf  (仿宋)
+  4、复制到/usr/share/fonts/
+  	cp msyh.ttc simfang.ttf /usr/share/fonts/
+  5、建立字体索引信息，更新字体缓存
+  	cd /usr/share/fonts/
+  	mkfontscale //如果提示 mkfontscale: command not found，需自行安装 # yum -y install mkfontscale 
+  	mkfontdir
+  	fc-cache //如果提示 fc-cache: command not found，则需要安装# yum -y install fontconfig
+  6、查看中文字体是否安装成功
+  	fc-list :lang=zh
+  /usr/share/fonts/msyh.ttc: Microsoft YaHei:style=Normal
+  /usr/share/fonts/msyh.ttc: Microsoft YaHei UI:style=Normal
+  /usr/share/fonts/simfang.ttf: FangSong:style=Regular,Normaali
+  ```
+
+  
+
+![image-20210721095246350](https://i.loli.net/2021/07/21/dMebXDctwSZk8Nx.png)
+
+
 
 ## 相关文章
 
