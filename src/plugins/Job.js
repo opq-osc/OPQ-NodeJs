@@ -206,6 +206,12 @@ let Jobs = {
                         'linkUrl': obj.href,
                         'groupId': groupId
                     }
+                    axios.get(obj.href).then(res => {
+                        console.log(res.data);
+                        const title = cheerio.load(res.data)('body > main > div > div.d-none.d-md-block.breadcrumbs.mb-3.mb-md-4 > span.current').text()
+                        console.log(title);
+                        data.content = title
+                    })
                     let urls = []
                     for (let i = 1; i <= obj.num; i++) {
                         let url = ''
