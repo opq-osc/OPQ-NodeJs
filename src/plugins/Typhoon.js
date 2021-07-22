@@ -11,7 +11,7 @@ let Typhoon = {
         });
         try {
             const page = await browser.newPage();
-            await page.goto('http://typhoon.zjwater.gov.cn/default.aspx', {
+            await page.goto('https://tf.istrongcloud.com', {
                 waitUntil: 'networkidle0'
             });
             await page.setViewport({
