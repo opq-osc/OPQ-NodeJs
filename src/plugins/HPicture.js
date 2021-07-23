@@ -106,11 +106,21 @@ function getIndex(res, num) {
 }
 
 async function sendPic(groupId, url) {
-    url = url.replace("i.pximg.net", "i.pixiv.cat")
-    const base64Img = await axios.get(url, { responseType: 'arraybuffer' })
-        .then(res => {
-            return new Buffer.from(res.data, 'binary').toString('base64')
-        })
+    // url = url.replace("i.pximg.net", "i.pixiv.cat")
+    url = url.replace("i.pximg.net", "i-cf.pximg.net")
+    const option =
+    {
+        headers: { referer: 'https://www.pixiv.net/' },
+        timeout: 30000,
+        responseType: 'arraybuffer'
+    }
+    const base64Img = await axios.create(option).get(url).then(res => {
+        return new Buffer.from(res.data, 'binary').toString('base64')
+    })
+    // const base64Img = await axios.get(url, { responseType: 'arraybuffer' })
+    //     .then(res => {
+    //         return new Buffer.from(res.data, 'binary').toString('base64')
+    //     })
     Api.SendPicMsgWithBase64(groupId, base64Img)
     // https.get(url, function (res) {
     //     var chunks = []; //用于保存网络请求不断加载传输的缓冲数据
