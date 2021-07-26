@@ -5,6 +5,7 @@ const Baike = require('../plugins/Baike')
 const Constellation = require('../plugins/Constellation')
 const HPicture = require('../plugins/HPicture')
 const Typhoon = require('../plugins/Typhoon')
+const Olympics = require('../plugins/Olympics')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
 const pattern = config.PATTERN
 socket.on('OnGroupMsgs', async data => {
@@ -18,6 +19,8 @@ socket.on('OnGroupMsgs', async data => {
             case '台风':
                 await Typhoon.doAction(FromGroupId)
                 break
+            case '奥运':
+                await Olympics.doAction(FromGroupId)
         }
         if (Content.indexOf("百科") == 0) {
             await Baike.doAction(FromGroupId, Content)
