@@ -15,8 +15,8 @@ let Olympics = {
                 waitUntil: 'networkidle0'
             });
             await page.setViewport({
-                width: 1920,
-                height: 1080
+                width: 900,
+                height: 720
             });
             //获取页面Dom对象
             let body = await page.$('body');
