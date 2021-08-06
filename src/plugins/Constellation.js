@@ -27,11 +27,11 @@ let Constellation = {
             }
         }
         if (flag) {
-            axios.get("https://www.xzw.com/fortune/aries/",{
+            axios.get('https://www.xzw.com/fortune/' + map.get(keyWord) + '/', {
                 httpsAgent: new https.Agent({
-                  rejectUnauthorized: false
+                    rejectUnauthorized: false
                 })
-              }).then(res =>{
+            }).then(res => {
                 const html = res.data
                 try {
                     let $ = cheerio.load(html)
