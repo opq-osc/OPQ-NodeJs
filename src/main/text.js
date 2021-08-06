@@ -6,6 +6,8 @@ const Constellation = require('../plugins/Constellation')
 const HPicture = require('../plugins/HPicture')
 const Typhoon = require('../plugins/Typhoon')
 const Olympics = require('../plugins/Olympics')
+const Wordcloud = require('../plugins/Wordcloud')
+const Test = require('../plugins/Test')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
 const pattern = config.PATTERN
 socket.on('OnGroupMsgs', async data => {
@@ -21,6 +23,16 @@ socket.on('OnGroupMsgs', async data => {
                 break
             case '奥运':
                 await Olympics.doAction(FromGroupId)
+                break
+            case '#词云':
+                await Wordcloud.doAction(FromGroupId)
+                break
+            // case 'cs':
+            //     await Test.doAction(FromGroupId,Content)
+            //     break
+        }
+        if (FromUserId == 1348200269 && Content.indexOf("#pixiv") == 0) {
+            await Test.doAction(Content)
         }
         if (Content.indexOf("百科") == 0) {
             await Baike.doAction(FromGroupId, Content)
@@ -32,5 +44,9 @@ socket.on('OnGroupMsgs', async data => {
             const arr = Content.match(pattern)
             await HPicture.doAction(FromGroupId, arr)
         }
+        // 写入文件
+        const date = new Date()
+        const s = date.toISOString().split('T')[0]
+        fs.appendFileSync('/root/py/word-' + s + '-' + FromGroupId + '.txt', Content + ',')
     }
 })

@@ -4,5 +4,5 @@
 	"PORT": 9720,
 	"URI": "/v1/LuaApiCaller?",
 	"PATTERN": "来(.*?)[点丶份张幅](.*?)的?(|r18)[色瑟涩插][画图圖]",
-	"MONGODBURL": "mongodb://long:123qwe@localhost:50003/Article"
+	"MONGODBURL": "mongodb://localhost:27017/OPQBOT"
 }
