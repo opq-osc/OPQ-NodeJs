@@ -14,7 +14,6 @@ let Wordcloud = {
                 const imageBase64 = imageData.toString("base64");
                 console.log(imageBase64.substring(1, 10))
                 Api.SendPicMsgWithBase64(groupId, imageBase64)
-                
             }
         });
 
