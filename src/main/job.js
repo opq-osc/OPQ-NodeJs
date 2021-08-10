@@ -19,9 +19,8 @@ schedule.scheduleJob('*/10 * * * *', () => {
     });
 })
 
-schedule.scheduleJob('0 0 9,12,18 * * *', () => {
-    ol.forEach(g => {
-        Olympics.doAction(g)
-    })
-
-})
+// schedule.scheduleJob('0 0 9,12,18 * * *', () => {
+//     ol.forEach(g => {
+//         Olympics.doAction(g)
+//     })
+// })

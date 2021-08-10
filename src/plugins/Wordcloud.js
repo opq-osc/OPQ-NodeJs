@@ -9,11 +9,12 @@ let Wordcloud = {
             if (err) {
                 console.log('get weather api error:' + stderr);
             } else {
-                const imageData = fs.readFileSync('/root/opq/wordcloud.jpg');
+                // console.log(stdout);
+                const imageData = fs.readFileSync('/home/opq/wordcloud.jpg');
                 const imageBase64 = imageData.toString("base64");
                 console.log(imageBase64.substring(1, 10))
                 Api.SendPicMsgWithBase64(groupId, imageBase64)
-
+                
             }
         });
 

@@ -21,8 +21,8 @@ socket.on('OnGroupMsgs', async data => {
             case '台风':
                 await Typhoon.doAction(FromGroupId)
                 break
-            case '奥运':
-                await Olympics.doAction(FromGroupId)
+            // case '奥运':
+            //     await Olympics.doAction(FromGroupId)
                 break
             case '#词云':
                 await Wordcloud.doAction(FromGroupId)
