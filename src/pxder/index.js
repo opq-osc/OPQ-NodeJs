@@ -13,8 +13,8 @@ const { Agent } = require('https');
 const CONFIG_FILE_DIR = require('path').resolve(__dirname,'..')
 const CONFIG_FILE = Path.resolve(CONFIG_FILE_DIR, 'pxder/config/config.json');
 
-console.log(CONFIG_FILE_DIR);
-console.log(CONFIG_FILE);
+// console.log(CONFIG_FILE_DIR);
+// console.log(CONFIG_FILE);
 
 const defaultConfig = {
   download: {

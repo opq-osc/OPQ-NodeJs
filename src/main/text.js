@@ -8,6 +8,7 @@ const Typhoon = require('../plugins/Typhoon')
 const Olympics = require('../plugins/Olympics')
 const Wordcloud = require('../plugins/Wordcloud')
 const Test = require('../plugins/Test')
+const Job = require('../plugins/Job')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
 const pattern = config.PATTERN
 socket.on('OnGroupMsgs', async data => {
@@ -28,7 +29,7 @@ socket.on('OnGroupMsgs', async data => {
                 await Wordcloud.doAction(FromGroupId)
                 break
             // case 'cs':
-            //     await Test.doAction(FromGroupId,Content)
+            //     await Job.yuanPhoto(FromGroupId)
             //     break
         }
         if (FromUserId == 1348200269 && Content.indexOf("#pixiv") == 0) {

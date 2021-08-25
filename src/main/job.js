@@ -1,8 +1,8 @@
 const schedule = require('node-schedule')
 const Job = require('../plugins/Job')
 const Olympics = require('../plugins/Olympics')
-const group = [578111062]
-const ol = [578111062, 757360354]
+const kimi = [578111062]
+const groups = [578111062, 757360354]
 schedule.scheduleJob('*/10 * * * *', () => {
     // 原神资讯
     // Job.yuanshen(578111062)
@@ -11,7 +11,7 @@ schedule.scheduleJob('*/10 * * * *', () => {
     // Job.zuxingjian(454417041)
     // Job.zuxingjianPhoto(454417041)
     // Job.zuxingjianArtical(454417041)
-    group.forEach(e => {
+    kimi.forEach(e => {
         Job.yuanshen(e)
         // Job.zuxingjian(e)
         // Job.zuxingjianPhoto(e)
@@ -19,8 +19,9 @@ schedule.scheduleJob('*/10 * * * *', () => {
     });
 })
 
-// schedule.scheduleJob('0 0 9,12,18 * * *', () => {
-//     ol.forEach(g => {
-//         Olympics.doAction(g)
-//     })
-// })
+schedule.scheduleJob('0 0 9,12,18 * * *', () => {
+    groups.forEach(g => {
+        Job.yuanPhoto(g)
+        // Olympics.doAction(g)
+    })
+})
