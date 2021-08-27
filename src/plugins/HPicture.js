@@ -39,12 +39,12 @@ function findPic(groupId, reg, num) {
                         nothing(groupId)
                         return
                     } else {
-                        pic(groupId, res, num)
+                        pic(groupId, res, res.length)
                         return
                     }
                 })
             } else {
-                pic(groupId, res, num)
+                pic(groupId, res, res.length)
             }
         })
     } else {
