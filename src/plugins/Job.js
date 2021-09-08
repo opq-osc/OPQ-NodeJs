@@ -104,10 +104,11 @@ let Jobs = {
 
                 }).toArray()
             )
-            console.log(result.length);
+            // console.log(result.length);
             //  https://images.free4.xyz/images/2021/07/05/tpj6y.jpg
             const index = Math.floor(Math.random() * 29)
             const url = result[index]
+            console.log(url);
             // 查库
             const md5 = MD5(url)
             const dbDate = await CRUD.findJob(md5, groupId)
@@ -127,8 +128,7 @@ let Jobs = {
                     const list = $('#' + id + ' > div > div.entry-content > p >a > img')
 
                     list.map(async (k) => {
-                        const alt = list[k].attribs.alt.split('.')
-                        const img = 'https://images.free4.xyz/images/' + url.substring(26, 36) + '/' + alt[0] + '.' + alt[2]
+                        const img = list[k].attribs['data-original'].replace('.th','')
                         console.log(img);
                         await Api.SendPicMsgV2(groupId, img, '')
 
@@ -225,7 +225,7 @@ let Jobs = {
     },
     m_95mm(groupId) {
         const page = Math.floor(Math.random() * 30)
-        console.log(page)
+        console.log("page--->",page)
         // https://www.95mm.net/search/?keywords=cos&append=list-home&paged=2&pos=search&page=2
         axios.get('https://www.95mm.net/search/?keywords=cos&append=list-home&paged=' + page + '&pos=search&page=' + page)
             .then(async res => {
@@ -241,6 +241,7 @@ let Jobs = {
                             url.href = cheerio.load(list[k])('div > div.media > a')[0].attribs.href
                             numPs = cheerio.load(list[k])('div > div.media > div > span').text()
                             url.num = Number(numPs.substring(0, numPs.lastIndexOf('P')))
+                            console.log(url);
                             return url
                         }
                     }).toArray()
@@ -263,7 +264,7 @@ let Jobs = {
                     }
                     await axios.get(obj.href).then(res => {
                         const title = cheerio.load(res.data)('body > main > div > div.d-none.d-md-block.breadcrumbs.mb-3.mb-md-4 > span.current').text()
-                        console.log(title);
+                        console.log("title--->",title);
                         data.content = title
                     })
                     console.log(data);
@@ -278,13 +279,12 @@ let Jobs = {
                         // console.log(url);
                         urls.push(url)
                     }
-                    console.log(urls.length);
                     urls.forEach(url => {
                         axios.get(url).then(async res => {
                             const html = res.data
                             const $ = cheerio.load(html)
                             const { src } = $('body > main > div > div.row.no-gutters > div > div.post-content > div.post > div > p > a > img')[0].attribs
-                            // console.log(src);
+                            console.log(src);
                             await Api.SendPicMsgV2(groupId, src, '')
                         })
                     })

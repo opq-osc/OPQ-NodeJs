@@ -5,8 +5,7 @@ const Baike = require('../plugins/Baike')
 const Constellation = require('../plugins/Constellation')
 const HPicture = require('../plugins/HPicture')
 const Typhoon = require('../plugins/Typhoon')
-const Olympics = require('../plugins/Olympics')
-const Wordcloud = require('../plugins/Wordcloud')
+// const Wordcloud = require('../plugins/Wordcloud')
 const Test = require('../plugins/Test')
 const Job = require('../plugins/Job')
 const config = JSON.parse(fs.readFileSync('./config/opqConfig.json'))
@@ -19,18 +18,20 @@ socket.on('OnGroupMsgs', async data => {
             case '历史上的今天':
                 await History.doAction(FromGroupId)
                 break
-            case '台风':
-                await Typhoon.doAction(FromGroupId)
-                break
+             case '台风':
+                 await Typhoon.doAction(FromGroupId)
+                 break
             // case '奥运':
             //     await Olympics.doAction(FromGroupId)
-                break
-            case '#词云':
-                await Wordcloud.doAction(FromGroupId)
-                break
-            // case 'cs':
-            //     await Job.yuanPhoto(FromGroupId)
             //     break
+            // case '#词云':
+            //     await Wordcloud.doAction(FromGroupId)
+            //     break
+             case 'cs':
+                //  await Job.yuanPhoto(FromGroupId)
+                //  await Job.m_95mm(FromGroupId)
+                 await Job.m_8kcosplay(FromGroupId)
+                 break
         }
         if (FromUserId == 1348200269 && Content.indexOf("#pixiv") == 0) {
             await Test.doAction(Content)
@@ -46,8 +47,8 @@ socket.on('OnGroupMsgs', async data => {
             await HPicture.doAction(FromGroupId, arr)
         }
         // 写入文件
-        const date = new Date()
-        const s = date.toISOString().split('T')[0]
-        fs.appendFileSync('/root/py/word-' + s + '-' + FromGroupId + '.txt', Content + ',')
+        // const date = new Date()
+        // const s = date.toISOString().split('T')[0]
+        // fs.appendFileSync('/data/data/com.termux/files/home/word-' + s + '-' + FromGroupId + '.txt', Content + ',')
     }
 })
