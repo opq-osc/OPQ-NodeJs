@@ -14,10 +14,9 @@ let Wordcloud = {
         const pixiv = new Pixiv();
         await pixiv.relogin();
 
-        // #pixiv:u:111 作者uid
-        // #pixiv:p:12312  插画pid
-        // #pixiv:b  收藏插画
-        // #pixiv:f  收藏画师
+        // #pixiv:u:111
+        // #pixiv:p:12312
+        // #pixiv:b
         const key = Content.split(':')
         if (key[1] == 'u') {
             uids = key[2].split(',');

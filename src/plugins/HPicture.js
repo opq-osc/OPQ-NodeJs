@@ -22,16 +22,19 @@ let HPicture = {
 
 function findPic(groupId, reg, num) {
     console.log("reg: " + reg);
+    let len = num;
     if (reg) {
         reg = new RegExp(reg) //模糊查询参数
         Pixiv.find({ tags: reg }, (err, res) => {
             console.log("Tag:" + res.length)
+	    len = num > res.length ? res.length : num;
             if (err) {
                 console.log(err)
                 return
             } else if (res.length === 0) {
                 Pixiv.find({ "author.name": reg }, (err, res) => {
                     console.log("Author.Name:" + res.length)
+		    len = num > res.length ? res.length : num;
                     if (err) {
                         console.log(err)
                         return
@@ -39,12 +42,12 @@ function findPic(groupId, reg, num) {
                         nothing(groupId)
                         return
                     } else {
-                        pic(groupId, res, res.length)
+                        pic(groupId, res, len)
                         return
                     }
                 })
             } else {
-                pic(groupId, res, res.length)
+                pic(groupId, res, len)
             }
         })
     } else {
@@ -108,38 +111,18 @@ function getIndex(res, num) {
 async function sendPic(groupId, url) {
     // url = url.replace("i.pximg.net", "i.pixiv.cat")
     url = url.replace("i.pximg.net", "i-cf.pximg.net")
-    const option =
-    {
-        headers: { referer: 'https://www.pixiv.net/' },
-        timeout: 30000,
-        responseType: 'arraybuffer'
-    }
-    const base64Img = await axios.create(option).get(url).then(res => {
-        return new Buffer.from(res.data, 'binary').toString('base64')
-    })
-    // const base64Img = await axios.get(url, { responseType: 'arraybuffer' })
-    //     .then(res => {
-    //         return new Buffer.from(res.data, 'binary').toString('base64')
-    //     })
-    Api.SendPicMsgWithBase64(groupId, base64Img)
-    // https.get(url, function (res) {
-    //     var chunks = []; //用于保存网络请求不断加载传输的缓冲数据
-    //     var size = 0;　　 //保存缓冲数据的总长度
-    //     res.on('data', function (chunk) {
-    //         chunks.push(chunk);
-    //         //累加缓冲数据的长度
-    //         size += chunk.length;
-    //     });
-    //     res.on('end', function (err) {
-    //         //Buffer.concat将chunks数组中的缓冲数据拼接起来，返回一个新的Buffer对象赋值给data
-    //         var data = Buffer.concat(chunks, size);
-    //         //可通过Buffer.isBuffer()方法判断变量是否为一个Buffer对象
-    //         console.log(Buffer.isBuffer(data));
-    //         //将Buffer对象转换为字符串并以base64编码格式显示
-    //         const base64Img = data.toString('base64');
-    //         Api.SendPicMsgWithBase64(groupId, base64Img)
-    //     });
-    // });
+    // const option =
+    // {
+    //     headers: { referer: 'https://www.pixiv.net/' },
+    //     timeout: 30000,
+    //     responseType: 'arraybuffer'
+    // }
+    // const base64Img = await axios.create(option).get(url).then(res => {
+    //     return new Buffer.from(res.data, 'binary').toString('base64')
+    // })
+    // Api.SendPicMsgWithBase64(groupId, base64Img)
+    Api.SendPicMsg(groupId, url, "")
+
 }
 
 module.exports = HPicture

@@ -5,6 +5,7 @@ const Baike = require('../plugins/Baike')
 const Constellation = require('../plugins/Constellation')
 const HPicture = require('../plugins/HPicture')
 const Typhoon = require('../plugins/Typhoon')
+const Genshin = require('../plugins/Genshin')
 // const Wordcloud = require('../plugins/Wordcloud')
 const Test = require('../plugins/Test')
 const Job = require('../plugins/Job')
@@ -18,20 +19,24 @@ socket.on('OnGroupMsgs', async data => {
             case '历史上的今天':
                 await History.doAction(FromGroupId)
                 break
-             case '台风':
-                 await Typhoon.doAction(FromGroupId)
-                 break
+            case '台风':
+                await Typhoon.doAction(FromGroupId)
+                break
             // case '奥运':
             //     await Olympics.doAction(FromGroupId)
             //     break
             // case '#词云':
             //     await Wordcloud.doAction(FromGroupId)
             //     break
-             case 'cs':
+            case 'cs':
                 //  await Job.yuanPhoto(FromGroupId)
                 //  await Job.m_95mm(FromGroupId)
-                 await Job.m_8kcosplay(FromGroupId)
-                 break
+                //  await Job.m_8kcosplay(FromGroupId)
+                await Job.zuxingjianArtical(FromGroupId)
+                break
+            case 'yshd':
+                await Genshin.activity(FromGroupId)
+                break
         }
         if (FromUserId == 1348200269 && Content.indexOf("#pixiv") == 0) {
             await Test.doAction(Content)

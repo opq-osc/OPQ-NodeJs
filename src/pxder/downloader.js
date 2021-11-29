@@ -472,13 +472,14 @@ async function getIllustratorNewDir(data) {
  * @param {Array} illustJSON 由API得到的画作JSON
  */
 async function downloadByIllusts(illustJSON) {
-	// console.log(illustJSON);
+	console.log(illustJSON);
 	let illusts = [];
 	for (const json of illustJSON) {
 		illusts = illusts.concat(await Illust.getIllusts(json));
 	}
-
-	await jsonToDb(illusts, config.thread)
+	if(illusts != undefined || illusts.length > 0){
+		await jsonToDb(illusts, config.thread)
+	}
 	// await downloadIllusts(illusts, Path.join(config.path, 'PID'), config.thread);
 }
 

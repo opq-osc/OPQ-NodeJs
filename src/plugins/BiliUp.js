@@ -50,6 +50,7 @@ let BiliUp = {
     },
     async listUps(groupId) {
         const result = await CRUD.listByGroupId(groupId)
+	console.log(result)
         let message = ''
         if (result.length > 0) {
             list = result

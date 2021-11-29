@@ -78,7 +78,8 @@ let Jobs = {
                 if (hasPicUrl) {
                     const PicUrl = ext[1].value[0].url
                     data.imageUrl = PicUrl
-                    await Api.SendPicMsgV2(groupId, PicUrl, message)
+                   // await Api.SendPicMsgV2(groupId, PicUrl, message)
+                   await Api.SendPicMsg(groupId, PicUrl, message)
                 } else {
                     await Api.SendTextMsg(groupId, message)
                 }
@@ -88,6 +89,7 @@ let Jobs = {
         })
     },
     m_8kcosplay(groupId) {
+	console.log(11111111111)
         axios.get('https://www.8kcosplay.com/').then(async res => {
             // console.log(res.data)
             const $ = cheerio.load(res.data)
@@ -107,6 +109,8 @@ let Jobs = {
             // console.log(result.length);
             //  https://images.free4.xyz/images/2021/07/05/tpj6y.jpg
             const index = Math.floor(Math.random() * 29)
+	    console.log(index)
+	    console.log(result)
             const url = result[index]
             console.log(url);
             // 查库
@@ -161,9 +165,9 @@ let Jobs = {
                     const pictures = jsonData.item.pictures
                     if (pictures) {
                         console.log(pictures.length);
-                        await Api.SendTextMsgV2(groupId, jsonData.item.description)
+                        await Api.SendTextMsg(groupId, jsonData.item.description)
                         pictures.forEach(async r => {
-                            await Api.SendPicMsgV2(groupId, r.img_src, "")
+                            await Api.SendPicMsg(groupId, r.img_src, "")
                         });
                         await CRUD.saveJob(data)
                     }
@@ -185,9 +189,9 @@ let Jobs = {
                         'linkUrl': '',
                         'groupId': groupId
                     }
-                    await Api.SendTextMsgV2(groupId, description)
+                    await Api.SendTextMsg(groupId, description)
                     pictures.forEach(async r => {
-                        await Api.SendPicMsgV2(groupId, r.img_src, "")
+                        await Api.SendPicMsg(groupId, r.img_src, "")
                     });
                     await CRUD.saveJob(data)
                 }
@@ -210,13 +214,13 @@ let Jobs = {
                     const url = 'https://www.bilibili.com/read/cv' + id
                     axios.get(url).then(async res => {
                         const $ = cheerio.load(res.data)
-                        data.content = $('head > title:nth-child(2)').text()
+                        data.content = $('#app > div > div.article-container > div.article-container__content > div.title-container > h1').text()
                         data.linkUrl = url
                         const list = $('#read-article-holder > figure')
-                        await Api.SendTextMsgV2(groupId, data.content)
+                        await Api.SendTextMsg(groupId, data.content)
                         list.map(async (k) => {
                             const obj = cheerio.load(list[k])('img')[0].attribs
-                            await Api.SendPicMsgV2(groupId, 'https:' + obj['data-src'], '')
+                            await Api.SendPicMsg(groupId, 'https:' + obj['data-src'], '')
                         })
                         await CRUD.saveJob(data)
                     })

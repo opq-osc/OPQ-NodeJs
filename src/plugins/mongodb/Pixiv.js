@@ -25,6 +25,6 @@ const PixivSchema = mongoose.Schema({
 })
 
 
-const PixivModel = mongoose.model("Pixiv", PixivSchema, "pixiv")
+const PixivModel = mongoose.model("Pixiv", PixivSchema, "pixiv2")
 
 module.exports = PixivModel
