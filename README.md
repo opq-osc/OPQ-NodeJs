@@ -1,6 +1,6 @@
 # OPQ-NodeJs
 ## 开始
-
+0.本人使用的服务器为Centos7
 1.首先的有node环境，没有的先[安装](https://xjlz.github.io/2020/08/10/Centos7%E5%AE%89%E8%A3%85Node+Npm/)。  
 2.有环境了，先 **npm install --unsafe-perm=true --allow-root**把依赖下载下来。  
 3.由于订阅功能使用到mongodb数据库，需要先[安装](https://xjlz.github.io/2020/08/10/MongoDB/)  
