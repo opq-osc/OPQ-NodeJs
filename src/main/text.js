@@ -51,6 +51,9 @@ socket.on('OnGroupMsgs', async data => {
             const arr = Content.match(pattern)
             await HPicture.doAction(FromGroupId, arr)
         }
+        if (Content.indexOf("原神查询") == 0) {
+            await Genshin.search(FromGroupId, Content)
+        }
         // 写入文件
         // const date = new Date()
         // const s = date.toISOString().split('T')[0]

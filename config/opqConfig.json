@@ -1,8 +1,0 @@
-{
-	"QQ": 1468557975,
-	"HOST": "127.0.0.1",
-	"PORT": 9720,
-	"URI": "/v1/LuaApiCaller?",
-	"PATTERN": "来(.*?)[点丶份张幅](.*?)的?(|r18)[色瑟涩插][画图圖]",
-	"MONGODBURL": "mongodb://localhost:27017/OPQBOT"
-}
