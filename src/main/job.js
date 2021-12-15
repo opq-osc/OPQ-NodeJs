@@ -3,12 +3,12 @@ const Job = require('../plugins/Job')
 const Genshin = require('../plugins/Genshin')
 const kimi = [578111062, 894170641]
 const zzzz = [894170641]
-const groups = [578111062, 757360354]
+const opqgroups = 757360354
 schedule.scheduleJob('0 30 * * * *', () => {
   // 原神资讯
   console.log('原神资讯推送');
   kimi.forEach(e => {
-    Job.yuanshen(e)
+    Genshin.information(e)
     // Job.zuxingjian(e)
     // Job.zuxingjianPhoto(e)
     // Job.zuxingjianArtical(e)
@@ -23,6 +23,7 @@ schedule.scheduleJob('0 30 * * * *', () => {
 
 schedule.scheduleJob('0 0 12,18 * * *', () => {
   Genshin.getResin()
+  Job.yuanPhoto(opqgroups)
 })
 
 //schedule.scheduleJob('0 0 3,6,9,12 * * *', () => {
