@@ -37,6 +37,8 @@ socket.on('OnGroupMsgs', async data => {
             case 'yshd':
                 await Genshin.activity(FromGroupId)
                 break
+            case 'test':
+                await Genshin.getResin()
         }
         if (FromUserId == 1348200269 && Content.indexOf("#pixiv") == 0) {
             await Test.doAction(Content)

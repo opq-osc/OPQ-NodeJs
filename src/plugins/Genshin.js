@@ -4,7 +4,7 @@ const Api = require('../SendMsg')
 const moment = require('moment')
 const exec = require('child_process').exec
 const fs = require('fs')
-
+let timer = null
 const activityUrl = 'https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?game=hk4e&game_biz=hk4e_cn&lang=zh-cn&bundle_id=hk4e_cn&platform=pc&region=cn_gf01&level=55&uid=100000000'
 let Genshin = {
     activity(groupId) {
@@ -42,14 +42,8 @@ let Genshin = {
                 if (err) {
                     console.log('error:' + stderr);
                     const a = stderr.split('RuntimeError: ')
-                    // console.log(a[1]);
-                    Api.SendTextMsgV2(groupId,a[1])
+                    Api.SendTextMsgV2(groupId, a[1])
                 } else {
-                    // console.log(stdout);
-                    // let info = fs.readFileSync('');
-                    // info = info.toString()
-                    // console.log(info);
-                    // await Api.SendTextMsgV2(groupId, info)
                     setTimeout(() => {
                         fs.readFile('/home/ubuntu/python/YuanShen_User_Info/info.txt', async (err, data) => {
                             if (err) throw err;
@@ -62,8 +56,30 @@ let Genshin = {
             });
         }
 
+    },
+    getResin() {
+        const cmdStr = 'python3 /home/ubuntu/python/YuanShen_User_Info/ys_UserInfoGet.py 101311469';
+        exec(cmdStr, function (err, stdout, stderr) {
+            if (err) {
+                console.log('error:' + stderr);
+                Api.SendTextMsg(551091928, '【原粹树脂】读取文件错误')
+            } else {
+                let time = 0
+                fs.readFile('/home/ubuntu/python/YuanShen_User_Info/dailyNote.json', (err, data) => {
+                    if (err) throw err;
+                    info = data.toString()
+                    let json = JSON.parse(info)
+                    console.log(json);
+                    time = Number(json.data.resin_recovery_time)
+                    clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        console.log('【原粹树脂提醒】');
+                        Api.SendTextMsg(551091928, "原粹树脂已满")
+                    }, time * 1000)
+                });
+
+            }
+        });
     }
 }
 module.exports = Genshin
-
-
