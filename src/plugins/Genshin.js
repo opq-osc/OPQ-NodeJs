@@ -4,6 +4,8 @@ const Api = require('../SendMsg')
 const moment = require('moment')
 const exec = require('child_process').exec
 const fs = require('fs')
+const MD5 = require('md5')
+const CRUD = require('./mongodb/crud')
 let timer = null
 const activityUrl = 'https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?game=hk4e&game_biz=hk4e_cn&lang=zh-cn&bundle_id=hk4e_cn&platform=pc&region=cn_gf01&level=55&uid=100000000'
 let Genshin = {
@@ -106,7 +108,6 @@ let Genshin = {
                         Api.SendTextMsg(551091928, "原粹树脂已满")
                     }, time * 1000)
                 });
-
             }
         });
     }
